@@ -135,7 +135,7 @@ pub fn read_input(buf: &mut BufReader<TcpStream>, stream: &mut TcpStream) {
             let _ = stream.write(b"-ERR Unexpected input type\r\n").unwrap();
         }
     }
-    stream.flush().unwrap();
+    // stream.flush().unwrap();
     let _ = stream.shutdown(std::net::Shutdown::Both);
     // buf.lines().for_each(|line| {
     //     let binding = line.unwrap_or("".to_owned());
