@@ -1,6 +1,5 @@
 // Uncomment this block to pass the first stage
 use std::{
-    collections::VecDeque,
     io::{BufRead, BufReader, Write},
     net::{TcpListener, TcpStream},
     thread,
@@ -84,7 +83,7 @@ pub fn read_input(buf: &mut BufReader<TcpStream>, stream: &mut TcpStream) {
 
     match input_type {
         RedisType::Array => {
-            // println!("{}", input_str);
+            println!("{}", input_str);
             let (_, len) = input_str.split_at(1);
             // println!("len: {}", len);
             let len = len.trim();
@@ -115,7 +114,9 @@ pub fn read_input(buf: &mut BufReader<TcpStream>, stream: &mut TcpStream) {
                                     .unwrap();
                                 return;
                             }
-                            inputs.push(temp.trim().to_owned());
+                            temp = temp.trim().to_owned();
+                            println!("{}", temp);
+                            inputs.push(temp);
                         }
                         _ => {
                             let _ = stream.write(b"-ERR invalid input type\r\n").unwrap();
