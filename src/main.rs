@@ -14,11 +14,11 @@ fn main() {
     let listener = TcpListener::bind("127.0.0.1:6379").unwrap();
 
     for stream in listener.incoming() {
-        thread::spawn(move || match stream {
+        let _test = thread::spawn(move || match stream {
             Ok(mut stream) => {
                 println!("accepted new connection");
                 let mut bufreader = BufReader::new(stream.try_clone().unwrap());
-                read_input(&mut bufreader, &mut stream)
+                read_input(&mut bufreader, &mut stream);
             }
             Err(e) => {
                 println!("error: {}", e);
