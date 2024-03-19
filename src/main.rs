@@ -74,7 +74,7 @@ pub fn read_input(buf: &mut BufReader<TcpStream>, stream: &mut TcpStream) {
         return;
     }
 
-    println!("{}", input_str);
+    // println!("{}", input_str);
 
     let input_type = get_redis_type(&input_str);
 
@@ -89,7 +89,7 @@ pub fn read_input(buf: &mut BufReader<TcpStream>, stream: &mut TcpStream) {
 
     match input_type {
         RedisType::Array => {
-            println!("{}", input_str);
+            // println!("{}", input_str);
             let (_, len) = input_str.split_at(1);
             // println!("len: {}", len);
             let len = len.trim();
@@ -121,7 +121,7 @@ pub fn read_input(buf: &mut BufReader<TcpStream>, stream: &mut TcpStream) {
                                 return;
                             }
                             temp = temp.trim().to_owned();
-                            println!("{}", temp);
+                            // println!("{}", temp);
                             inputs.push(temp);
                         }
                         _ => {
