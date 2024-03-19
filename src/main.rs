@@ -70,6 +70,10 @@ pub fn read_input(buf: &mut BufReader<TcpStream>, stream: &mut TcpStream) {
 
     let input_str = input_str.trim();
 
+    if input_str.len() == 0 {
+        return;
+    }
+
     println!("{}", input_str);
 
     let input_type = get_redis_type(&input_str);
@@ -127,7 +131,7 @@ pub fn read_input(buf: &mut BufReader<TcpStream>, stream: &mut TcpStream) {
                     i += 1;
                 }
                 parse_inputs(inputs, stream);
-                buf.lines().for_each(|line| println!("{}", line.unwrap()));
+                read_input(buf, stream);
             } else {
                 let _ = stream.write(b"-ERR invalid input length\r\n").unwrap();
             }
