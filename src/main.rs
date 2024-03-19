@@ -1,5 +1,10 @@
 // Uncomment this block to pass the first stage
-use std::{io::Write, net::TcpListener};
+use std::{
+    io::{BufRead, BufReader, Write},
+    net::TcpListener,
+};
+
+use bytes::buf;
 
 fn main() {
     // You can use print statements as follows for debugging, they'll be visible when running tests.
@@ -13,7 +18,20 @@ fn main() {
         match stream {
             Ok(mut stream) => {
                 println!("accepted new connection");
-                stream.write(b"+PONG\r\n").unwrap();
+                let bufreader = BufReader::new(stream.try_clone().unwrap());
+                bufreader.lines().for_each(|line| {
+                    let binding = line.unwrap_or("".to_owned());
+                    let line = binding.as_str();
+                    println!("{}", line);
+                    match line {
+                        "ping" => {
+                            let _ = &stream.write(b"+PONG\r\n").unwrap();
+                        }
+                        _ => {
+                            println!("err: {}", line);
+                        } // &stream.write(b"Unknown Command"),
+                    };
+                })
             }
             Err(e) => {
                 println!("error: {}", e);
