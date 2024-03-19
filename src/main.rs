@@ -70,6 +70,8 @@ pub fn read_input(buf: &mut BufReader<TcpStream>, stream: &mut TcpStream) {
 
     let input_str = input_str.trim();
 
+    println!("{}", input_str);
+
     let input_type = get_redis_type(&input_str);
 
     if input_type.is_none() {
