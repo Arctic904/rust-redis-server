@@ -126,8 +126,8 @@ pub fn read_input(buf: &mut BufReader<TcpStream>, stream: &mut TcpStream) {
                     }
                     i += 1;
                 }
-                parse_inputs(inputs, stream)
-                buf.lines().for_each(|line| println!("{}", line.unwrap()))
+                parse_inputs(inputs, stream);
+                buf.lines().for_each(|line| println!("{}", line.unwrap()));
             } else {
                 let _ = stream.write(b"-ERR invalid input length\r\n").unwrap();
             }
