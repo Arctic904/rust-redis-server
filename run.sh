@@ -1,0 +1,1 @@
+cargo-watch -s "./spawn_redis_server.sh"
