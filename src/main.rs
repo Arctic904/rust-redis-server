@@ -127,6 +127,7 @@ pub fn read_input(buf: &mut BufReader<TcpStream>, stream: &mut TcpStream) {
                     i += 1;
                 }
                 parse_inputs(inputs, stream)
+                buf.lines().for_each(|line| println!("{}", line.unwrap()))
             } else {
                 let _ = stream.write(b"-ERR invalid input length\r\n").unwrap();
             }
@@ -135,25 +136,8 @@ pub fn read_input(buf: &mut BufReader<TcpStream>, stream: &mut TcpStream) {
             let _ = stream.write(b"-ERR Unexpected input type\r\n").unwrap();
         }
     }
-    // stream.flush().unwrap();
+    stream.flush().unwrap();
     let _ = stream.shutdown(std::net::Shutdown::Both);
-    // buf.lines().for_each(|line| {
-    //     let binding = line.unwrap_or("".to_owned());
-    //     let line = binding.as_str();
-    //     println!("{}", line);
-    //     match line {
-    //         "ping" => {
-    //             let _ = &stream.write(b"+PONG\r\n").unwrap();
-    //         }
-    //         "echo" => {
-    //             let _ = &stream.write(b"+test").unwrap();
-    //         }
-    //         _ => {
-    //             println!("err: {}", line);
-    //             // let _ = &stream.write(b"-Unknown Command").unwrap();
-    //         } //
-    //     };
-    // })
 }
 
 pub fn parse_inputs(mut inputs: Vec<String>, stream: &mut TcpStream) {
