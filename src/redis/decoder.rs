@@ -10,6 +10,7 @@ pub enum CommandType {
     Info(Info),
     ReplConf(Conf),
     Psync,
+    OkStatus,
 }
 
 pub struct Get {
@@ -80,7 +81,8 @@ impl fmt::Display for DecodeError {
 }
 
 pub fn decode(mut input: Vec<String>) -> Result<CommandType, DecodeError> {
-    let command = input.first().to_owned().unwrap().as_str();
+    let binding = input.first().to_owned().unwrap().to_ascii_lowercase();
+    let command = binding.as_str();
     match command {
         "get" => {
             if input.len() == 2 {
@@ -215,6 +217,7 @@ pub fn decode(mut input: Vec<String>) -> Result<CommandType, DecodeError> {
         },
         "ping" => Ok(CommandType::Ping),
         "psync" => Ok(CommandType::Psync),
+        "ok" => Ok(CommandType::OkStatus),
         _ => Err(DecodeError::Unimplimented),
     }
 }
