@@ -1,6 +1,7 @@
 pub mod decoder;
 pub mod encoder;
 pub mod handle_input;
+pub mod replica;
 pub mod set_parse;
 
 use chrono::{DateTime, Utc};

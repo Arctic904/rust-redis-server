@@ -60,6 +60,10 @@ fn main() {
 
     let listener = TcpListener::bind(format!("127.0.0.1:{}", args.port)).unwrap();
 
+    if let Some(replica) = replica.clone() {
+        redis::replica::connect_to_master(replica);
+    }
+
     for stream in listener.incoming() {
         let replica = replica.clone();
         let cloned_store = Arc::clone(&data_store);
