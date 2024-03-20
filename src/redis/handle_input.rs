@@ -167,6 +167,7 @@ pub fn parse_inputs(
             }
         }
         Info(info) => {
+            //comment
             let role = match replica {
                 Some(rep) => "slave".to_owned(),
                 None => "master".to_owned(),
