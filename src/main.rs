@@ -10,7 +10,7 @@ use std::{
 use chrono::{DateTime, Local, NaiveDateTime, Utc};
 
 const DEFAULT_DT: DateTime<Utc> = DateTime::from_timestamp_nanos(0);
-const NULL_REPLY: &[u8; 4] = b"-1\r\n";
+const NULL_REPLY: &[u8; 5] = b"$-1\r\n";
 
 fn main() {
     // You can use print statements as follows for debugging, they'll be visible when running tests.
