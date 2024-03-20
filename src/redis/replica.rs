@@ -2,7 +2,7 @@ use std::{borrow::BorrowMut, io::Write, net::TcpStream};
 
 use crate::Replica;
 
-pub fn connect_to_master(replica: Replica) {
+pub fn connect_to_master(replica: Replica, port: u16) {
     //comment
     let connection = TcpStream::connect(format!("{}:{}", replica.host, replica.port));
     let mut binding = connection.expect("Misconfigured Master, invalid port or host");
@@ -14,8 +14,8 @@ pub fn connect_to_master(replica: Replica) {
         .write(
             format!(
                 "*3\r\n$8\r\nREPLCONF\r\n$14\r\nlistening-port\r\n${}\r\n{}\r\n",
-                replica.port.to_string().len(),
-                replica.port
+                port.to_string().len(),
+                port
             )
             .as_bytes(),
         )
