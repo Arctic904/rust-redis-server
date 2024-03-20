@@ -8,19 +8,31 @@ use std::{
 };
 
 use chrono::{DateTime, Utc};
+use clap::Parser;
 
 const DEFAULT_DT: DateTime<Utc> = DateTime::from_timestamp_nanos(0);
 const NULL_REPLY: &[u8; 5] = b"$-1\r\n";
+
+#[derive(Debug, Parser)]
+#[clap(name = "redis-server", version)]
+pub struct RedisServer {
+    #[clap(long, default_value_t = 6379)]
+    port: u16,
+}
 
 fn main() {
     // You can use print statements as follows for debugging, they'll be visible when running tests.
     println!("Logs from your program will appear here!");
 
+    let args = RedisServer::parse();
+
+    println!("Given Port: {}", args.port);
+
     let data_store = Arc::new(Mutex::new(HashMap::<String, Data>::new()));
 
     // Uncomment this block to pass the first stage
 
-    let listener = TcpListener::bind("127.0.0.1:6379").unwrap();
+    let listener = TcpListener::bind(format!("127.0.0.1:{}", args.port)).unwrap();
 
     for stream in listener.incoming() {
         let cloned_store = Arc::clone(&data_store);
