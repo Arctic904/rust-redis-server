@@ -205,7 +205,9 @@ second_repl_offset:-1",
             }
         },
         Psync => {
-            let _ = &stream.write(b"+FULLRESYNC <REPL_ID> 0\r\n").unwrap();
+            let _ = &stream
+                .write(b"+FULLRESYNC 8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb 0\r\n")
+                .unwrap();
         }
         OkStatus => (),
     };

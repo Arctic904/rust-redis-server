@@ -20,7 +20,7 @@ pub fn connect_to_master(
     let mut buffer = BufReader::new(stream.try_clone().unwrap());
     let mut data = String::new();
     let _ = buffer.read_line(&mut data);
-    println!("Data: {}", data);
+    // println!("Data: {}", data);
 
     let _ = &stream
         .write(
@@ -35,7 +35,7 @@ pub fn connect_to_master(
 
     let mut data = String::new();
     let _ = buffer.read_line(&mut data);
-    println!("Data: {}", data);
+    // println!("Data: {}", data);
 
     let _ = &stream
         .write(b"*3\r\n$8\r\nREPLCONF\r\n$4\r\ncapa\r\n$6\r\npsync2\r\n")
@@ -43,7 +43,7 @@ pub fn connect_to_master(
 
     let mut data = String::new();
     let _ = buffer.read_line(&mut data);
-    println!("Data: {}", data);
+    // println!("Data: {}", data);
 
     let _ = &stream
         .write(b"*3\r\n$5\r\nPSYNC\r\n$1\r\n?\r\n$2\r\n-1\r\n")
@@ -51,6 +51,6 @@ pub fn connect_to_master(
 
     let mut data = String::new();
     let _ = buffer.read_line(&mut data);
-    println!("Data: {}", data);
+    // println!("Data: {}", data);
     (Some(binding), Some(buffer))
 }
