@@ -1,4 +1,3 @@
-use std::borrow::{Borrow, BorrowMut};
 use std::collections::HashMap;
 use std::io::Write;
 use std::net::TcpStream;
@@ -39,13 +38,13 @@ pub fn set_parse(
         value: set.value,
         expires_at: match set.ttl {
             Some(ttl) => match ttl {
-                Ttl::Keepttl => {
-                    if let Some(prev) = prev {
-                        prev.expires_at
-                    } else {
-                        None
-                    }
-                }
+                // Ttl::Keepttl => {
+                //     if let Some(prev) = prev {
+                //         prev.expires_at
+                //     } else {
+                //         None
+                //     }
+                // }
                 Ttl::Ex(ttl) => Some(ttl),
                 Ttl::Px(ttl) => Some(ttl),
                 Ttl::Exat(ttl) => Some(ttl),

@@ -34,7 +34,7 @@ pub fn read_input(
 
     // println!("{}", input_str);
 
-    let input_type = get_redis_type(&input_str);
+    let input_type = get_redis_type(input_str);
 
     if input_type.is_none() {
         let _ = stream.write(b"-Error Unknown Input\r\n").unwrap();
@@ -169,7 +169,7 @@ pub fn parse_inputs(
         Info(info) => {
             //comment
             let role = match replica {
-                Some(rep) => "slave".to_owned(),
+                Some(_rep) => "slave".to_owned(),
                 None => "master".to_owned(),
             };
             let output_str = info
@@ -195,10 +195,10 @@ second_repl_offset:-1",
             let _ = stream.write(data.as_bytes()).unwrap();
         }
         ReplConf(conf) => match conf {
-            super::decoder::Conf::ListenPort(port) => {
+            super::decoder::Conf::ListenPort(_port) => {
                 let _ = stream.write(b"+OK\r\n").unwrap();
             }
-            super::decoder::Conf::Capa(capa) => {
+            super::decoder::Conf::Capa(_capa) => {
                 let _ = stream.write(b"+OK\r\n").unwrap();
             }
         },

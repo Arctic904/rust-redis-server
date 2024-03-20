@@ -5,7 +5,6 @@ use std::{
     collections::HashMap,
     io::BufReader,
     net::TcpListener,
-    str::FromStr,
     sync::{Arc, Mutex},
     thread,
 };

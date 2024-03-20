@@ -20,7 +20,7 @@ pub enum Ttl {
     Px(DateTime<Utc>),
     Exat(DateTime<Utc>),
     Pxat(DateTime<Utc>),
-    Keepttl,
+    //Keepttl,
 }
 
 pub enum SetFlag {

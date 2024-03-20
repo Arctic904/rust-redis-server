@@ -22,6 +22,7 @@ impl Default for Data {
 }
 
 impl Data {
+    #[allow(dead_code)]
     pub fn new(data: String, expires: Option<DateTime<Utc>>) -> Self {
         Data {
             value: data,
