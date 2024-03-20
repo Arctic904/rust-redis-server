@@ -194,18 +194,18 @@ second_repl_offset:-1",
                 .collect::<Vec<String>>()
                 .join("\r\n");
             let data = format!("${}\r\n{}\r\n", output_str.trim().len(), output_str.trim());
-            let _ = stream.write(data.as_bytes()).unwrap();
+            let _ = &stream.write(data.as_bytes()).unwrap();
         }
         ReplConf(conf) => match conf {
             super::decoder::Conf::ListenPort(_port) => {
-                let _ = stream.write(b"+OK\r\n").unwrap();
+                let _ = &stream.write(b"+OK\r\n").unwrap();
             }
             super::decoder::Conf::Capa(_capa) => {
-                let _ = stream.write(b"+OK\r\n").unwrap();
+                let _ = &stream.write(b"+OK\r\n").unwrap();
             }
         },
         Psync => {
-            let _ = stream.write(b"+FULLRESYNC <REPL_ID> 0\r\n").unwrap();
+            let _ = &stream.write(b"+FULLRESYNC <REPL_ID> 0\r\n").unwrap();
         }
         OkStatus => (),
     };

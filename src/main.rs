@@ -59,16 +59,21 @@ fn main() {
 
     let listener = TcpListener::bind(format!("127.0.0.1:{}", args.port)).unwrap();
 
-    if let Some(replica) = replica.clone() {
-        redis::replica::connect_to_master(replica, args.port);
-    }
+    let (stream, buffer) = if let Some(replica) = replica.clone() {
+        redis::replica::connect_to_master(replica, args.port)
+    } else {
+        (None, None)
+    };
 
     for stream in listener.incoming() {
         let replica = replica.clone();
         let cloned_store = Arc::clone(&data_store);
         let _test = thread::spawn(move || match stream {
             Ok(mut stream) => {
-                println!("accepted new connection");
+                println!(
+                    "accepted new connection at {}",
+                    stream.peer_addr().expect("Error")
+                );
                 let mut bufreader = BufReader::new(stream.try_clone().unwrap());
                 read_input(&mut bufreader, &mut stream, cloned_store, replica);
             }
