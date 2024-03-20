@@ -51,7 +51,7 @@ fn main() {
         port: rep.get(1).unwrap().parse().unwrap(),
     });
 
-    println!("Port: {}\n{:?}", args.port, replica);
+    // println!("Port: {}\n{:?}", args.port, replica);
 
     let data_store = Arc::new(Mutex::new(HashMap::<String, redis::Data>::new()));
 

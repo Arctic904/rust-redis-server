@@ -9,6 +9,7 @@ pub enum CommandType {
     Ping,
     Info(Info),
     ReplConf(Conf),
+    Psync,
 }
 
 pub struct Get {
@@ -213,6 +214,7 @@ pub fn decode(mut input: Vec<String>) -> Result<CommandType, DecodeError> {
             _ => Err(DecodeError::SubUnimplimented),
         },
         "ping" => Ok(CommandType::Ping),
+        "psync" => Ok(CommandType::Psync),
         _ => Err(DecodeError::Unimplimented),
     }
 }

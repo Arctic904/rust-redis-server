@@ -49,7 +49,7 @@ pub fn read_input(
 
     match input_type {
         RedisType::Array => {
-            println!("{}", input_str);
+            // println!("{}", input_str);
             let (_, len) = input_str.split_at(1);
             // println!("len: {}", len);
             let len = len.trim();
@@ -123,6 +123,8 @@ pub fn parse_inputs(
         return;
     }
 
+    println!("{:?}", inputs);
+
     let command = super::decoder::decode(inputs);
     if let Err(err) = command {
         let _ = stream.write(format!("-ERR {}", err).as_bytes());
@@ -139,14 +141,14 @@ pub fn parse_inputs(
                 return;
             }
             let data = format!("${}\r\n{}\r\n", val.len(), val);
-            println!("{}", data);
+            // println!("{}", data);
             let _ = &stream.write(data.as_bytes()).unwrap();
         }
         Set(set) => set_parse(set, stream, data_store),
         Get(get) => {
             let mut store = data_store.lock().unwrap();
             let data = store.get(&get.key);
-            println!("{:?}\n{}\n{:?}", store.keys(), get.key, data);
+            // println!("{:?}\n{}\n{:?}", store.keys(), get.key, data);
             if let Some(data) = data {
                 if data.expires_at.is_none() {
                     let output = format!("${}\r\n{}\r\n", data.value.len(), data.value);
@@ -162,7 +164,7 @@ pub fn parse_inputs(
                 let output = format!("${}\r\n{}\r\n", data.value.len(), data.value);
                 let _ = &stream.write(output.as_bytes());
             } else {
-                println!("{}", get.key);
+                // println!("{}", get.key);
                 let _ = &stream.write(NULL_REPLY);
             }
         }
@@ -202,5 +204,8 @@ second_repl_offset:-1",
                 let _ = stream.write(b"+OK\r\n").unwrap();
             }
         },
+        Psync => {
+            let _ = stream.write(b"+FULLRESYNC <REPL_ID> 0\r\n").unwrap();
+        }
     };
 }
