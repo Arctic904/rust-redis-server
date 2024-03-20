@@ -318,7 +318,7 @@ pub fn parse_inputs(
                     let _ = &stream.write(NULL_REPLY).unwrap();
                     return;
                 }
-                let _ = &stream.write(b"+Ok\r\n").unwrap();
+                let _ = &stream.write(b"+OK\r\n").unwrap();
                 return;
             }
             store.insert(
