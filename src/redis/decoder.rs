@@ -8,6 +8,7 @@ pub enum CommandType {
     Echo(String),
     Ping,
     Info(Info),
+    ReplConf(Conf),
 }
 
 pub struct Get {
@@ -33,6 +34,11 @@ pub struct Set {
     pub ttl: Option<Ttl>,
     pub flag: Option<SetFlag>,
     pub get: bool,
+}
+
+pub enum Conf {
+    ListenPort(u16),
+    Capa(String),
 }
 
 pub enum InfoSelection {
@@ -197,6 +203,15 @@ pub fn decode(mut input: Vec<String>) -> Result<CommandType, DecodeError> {
 
             Ok(CommandType::Info(Info { section: Some(out) }))
         }
+        "replconf" => match input.get(1).unwrap().to_ascii_lowercase().as_str() {
+            "listening-port" => Ok(CommandType::ReplConf(Conf::ListenPort(
+                input.get(2).unwrap().parse().unwrap(),
+            ))),
+            "capa" => Ok(CommandType::ReplConf(Conf::Capa(
+                input.get(2).unwrap().to_string(),
+            ))),
+            _ => Err(DecodeError::SubUnimplimented),
+        },
         "ping" => Ok(CommandType::Ping),
         _ => Err(DecodeError::Unimplimented),
     }

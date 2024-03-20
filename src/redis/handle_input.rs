@@ -194,5 +194,13 @@ second_repl_offset:-1",
             let data = format!("${}\r\n{}\r\n", output_str.trim().len(), output_str.trim());
             let _ = stream.write(data.as_bytes()).unwrap();
         }
+        ReplConf(conf) => match conf {
+            super::decoder::Conf::ListenPort(port) => {
+                let _ = stream.write(b"+OK\r\n").unwrap();
+            }
+            super::decoder::Conf::Capa(capa) => {
+                let _ = stream.write(b"+OK\r\n").unwrap();
+            }
+        },
     };
 }
