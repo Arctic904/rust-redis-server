@@ -23,4 +23,8 @@ pub fn connect_to_master(replica: Replica, port: u16) {
     let _ = &stream
         .write(b"*3\r\n$8\r\nREPLCONF\r\n$4\r\ncapa\r\n$6\r\npsync2\r\n")
         .unwrap();
+
+    let _ = &stream
+        .write(b"*3\r\n$5\r\nPSYNC\r\n$1\r\n?\r\n$2\r\n-1\r\n")
+        .unwrap();
 }
