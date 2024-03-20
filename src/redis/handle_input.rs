@@ -11,11 +11,13 @@ use super::decoder::CommandType::*;
 use super::decoder::InfoSelection::*;
 use super::set_parse::set_parse;
 use super::{get_redis_type, Data, RedisType};
+use crate::Replica;
 
 pub fn read_input(
     buf: &mut BufReader<TcpStream>,
     stream: &mut TcpStream,
     data_store: Arc<Mutex<HashMap<String, Data>>>,
+    replica: Option<Replica>,
 ) {
     let mut input_str = String::new();
     let test = buf.read_line(&mut input_str);
@@ -96,8 +98,8 @@ pub fn read_input(
                     }
                     i += 1;
                 }
-                parse_inputs(inputs, stream, Arc::clone(&data_store));
-                read_input(buf, stream, Arc::clone(&data_store));
+                parse_inputs(inputs, stream, Arc::clone(&data_store), replica.clone());
+                read_input(buf, stream, Arc::clone(&data_store), replica.clone());
             } else {
                 let _ = stream.write(b"-ERR invalid input length\r\n").unwrap();
             }
@@ -114,6 +116,7 @@ pub fn parse_inputs(
     inputs: Vec<String>,
     stream: &mut TcpStream,
     data_store: Arc<Mutex<HashMap<String, Data>>>,
+    replica: Option<Replica>,
 ) {
     if inputs.is_empty() {
         let _ = stream.write(b"-ERR invalid commands\r\n");
@@ -164,22 +167,28 @@ pub fn parse_inputs(
             }
         }
         Info(info) => {
+            let role = match replica {
+                Some(rep) => "slave".to_owned(),
+                None => "master".to_owned(),
+            };
             let output_str = info
                 .section
                 .unwrap()
                 .iter()
                 .map(|x| match x {
-                    Replication => {
+                    Replication => format!(
                         "# Replication
-role:master
+role:{}
 connected_slaves:0
 master_replid:8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb
 master_repl_offset:0
-second_repl_offset:-1"
-                    }
-                    Unimplimented => "",
+second_repl_offset:-1",
+                        role
+                    )
+                    .to_owned(),
+                    Unimplimented => "".to_owned(),
                 })
-                .collect::<Vec<&str>>()
+                .collect::<Vec<String>>()
                 .join("\r\n");
             let data = format!("${}\r\n{}\r\n", output_str.trim().len(), output_str.trim());
             let _ = stream.write(data.as_bytes()).unwrap();
