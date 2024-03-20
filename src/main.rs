@@ -7,7 +7,7 @@ use std::{
     thread,
 };
 
-use chrono::{DateTime, Local, NaiveDateTime, Utc};
+use chrono::{DateTime, Utc};
 
 const DEFAULT_DT: DateTime<Utc> = DateTime::from_timestamp_nanos(0);
 const NULL_REPLY: &[u8; 5] = b"$-1\r\n";
@@ -146,7 +146,7 @@ pub fn read_input(
                     let temp = get_redis_type(&buf_type).unwrap_or(RedisType::SimpleError);
                     match temp {
                         RedisType::BulkString => {
-                            let (old, len) = buf_type.split_at(1);
+                            let (_old, len) = buf_type.split_at(1);
                             let len = len.trim();
                             let len = len.parse::<usize>();
                             let mut temp = String::new();
@@ -158,14 +158,14 @@ pub fn read_input(
                                 return;
                             };
                             let len = len.unwrap();
-                            println!(
-                                "{}{}\n{}\n{:?}: {}",
-                                old,
-                                len,
-                                temp.len(),
-                                temp.as_bytes(),
-                                temp
-                            );
+                            // println!(
+                            //     "{}{}\n{}\n{:?}: {}",
+                            //     old,
+                            //     len,
+                            //     temp.len(),
+                            //     temp.as_bytes(),
+                            //     temp
+                            // );
                             if len != temp.len() {
                                 let _ = stream
                                     .write(b"-ERR invalid input - incorrect length\r\n")
@@ -333,8 +333,15 @@ pub fn parse_inputs(
                 return;
             }
             let store = data_store.lock().unwrap();
-            let data = store.get(args.first().unwrap());
+            let key = args.first().unwrap();
+            let data = store.get(key);
+            println!("{:?}\n{}\n{:?}", store.keys(), key, data);
             if let Some(data) = data {
+                if data.expires_at == DEFAULT_DT {
+                    let output = format!("${}\r\n{}\r\n", data.value.len(), data.value);
+                    let _ = &stream.write(output.as_bytes());
+                    return;
+                }
                 let diff = data.expires_at.signed_duration_since(Utc::now());
                 if diff <= chrono::Duration::zero() {
                     let _ = &stream.write(NULL_REPLY);
@@ -343,7 +350,8 @@ pub fn parse_inputs(
                 let output = format!("${}\r\n{}\r\n", data.value.len(), data.value);
                 let _ = &stream.write(output.as_bytes());
             } else {
-                let _ = &stream.write(b"$-1\r\n");
+                println!("{}", args.first().unwrap());
+                let _ = &stream.write(NULL_REPLY);
             }
         }
         _ => {
