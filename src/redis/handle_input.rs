@@ -1,3 +1,4 @@
+use base64::prelude::*;
 use std::collections::HashMap;
 use std::io::{BufRead, BufReader, Write};
 use std::net::TcpStream;
@@ -208,6 +209,16 @@ second_repl_offset:-1",
             let _ = &stream
                 .write(b"+FULLRESYNC 8371b4fb1155b71f4a04d3e1bc3e18c4a990aeeb 0\r\n")
                 .unwrap();
+
+            let empty = BASE64_STANDARD.decode(crate::EMPTY_RDB).unwrap();
+
+            println!("{}", String::from_utf8_lossy(&empty));
+
+            let mut data = format!("${}\r\n", empty.len()).as_bytes().to_vec();
+
+            data.extend(&empty);
+
+            let _ = &stream.write(&data).unwrap();
         }
         OkStatus => (),
     };

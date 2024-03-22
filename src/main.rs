@@ -21,6 +21,7 @@ pub struct Replica {
 
 const NULL_REPLY: &[u8; 5] = b"$-1\r\n";
 const OK_REPLY: &[u8; 5] = b"+OK\r\n";
+const EMPTY_RDB: &str = "UkVESVMwMDEx+glyZWRpcy12ZXIFNy4yLjD6CnJlZGlzLWJpdHPAQPoFY3RpbWXCbQi8ZfoIdXNlZC1tZW3CsMQQAPoIYW9mLWJhc2XAAP/wbjv+wP9aog==";
 
 #[derive(Debug, Parser)]
 #[clap(name = "redis-server", version)]
@@ -52,6 +53,8 @@ fn main() {
     });
 
     // println!("Port: {}\n{:?}", args.port, replica);
+
+    println!("127.0.0.1:{}", args.port);
 
     let data_store = Arc::new(Mutex::new(HashMap::<String, redis::Data>::new()));
 

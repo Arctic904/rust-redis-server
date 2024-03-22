@@ -1,0 +1,1 @@
+cargo-watch -s "./spawn_redis_server.sh --port 1234 --replicaof localhost 6379" -d 2

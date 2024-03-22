@@ -51,6 +51,26 @@ pub fn connect_to_master(
 
     let mut data = String::new();
     let _ = buffer.read_line(&mut data);
-    // println!("Data: {}", data);
+
+    let mut byte_total = String::new();
+    let _ = buffer.read_line(&mut byte_total);
+    println!("Bytes: {}", byte_total);
+
+    let byte: usize = byte_total
+        .split('$')
+        .find(|x| !x.is_empty())
+        .unwrap()
+        .trim()
+        .parse()
+        .unwrap();
+
+    println!("{:?}", byte);
+
+    let mut data_buf = vec![0; byte];
+
+    let _ = buffer.read_exact(&mut data_buf);
+
+    println!("End: {}", String::from_utf8_lossy(&data_buf));
+
     (Some(binding), Some(buffer))
 }
