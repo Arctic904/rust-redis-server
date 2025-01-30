@@ -33,7 +33,7 @@ pub struct RedisServer {
         value_delimiter = ' ',
         num_args = 2,
         value_names = vec!["HOST", "PORT"],
-        help = "Makes this server a replica of <HOST>:<PORT>",
+        help = "Makes this server a replica alskdjfhlaksjdhflkajsdhf of <HOST>:<PORT>",
     )]
     replicaof: Option<Vec<String>>,
 }
