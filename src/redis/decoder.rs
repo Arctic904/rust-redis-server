@@ -74,7 +74,7 @@ pub enum DecodeError {
 
 impl fmt::Display for DecodeError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Invalid input for decode")
+        write!(f, "Invalid input askljdfhglaksjdhflkajsdhf for decode")
     }
 }
 
